@@ -1,33 +1,49 @@
-import org.apache.jmeter.config.Arguments;
-import org.apache.jmeter.protocol.java.sampler.AbstractJavaSamplerClient;
-import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
-import org.apache.jmeter.samplers.SampleResult;
+import org.jdiameter.api.*;
+import org.jdiameter.client.impl.StackImpl;
+import org.jdiameter.client.impl.helpers.XMLConfiguration;
 
-/**
- * @author Per Johansson
- */
-public class DiameterStack extends AbstractJavaSamplerClient {
+import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 
-    private static final String METHOD_TAG = "method";
-    private static final String ARG1_TAG = "arg1";
-    private static final String ARG2_TAG = "arg2";
+public class DiameterStack {
 
-    @Override
-    public Arguments getDefaultParameters() {
+    private final Stack clientStack;
+    private final SessionFactory sessionFactory;
+    private final DiameterStackConfiguration diameterStackConfiguration;
 
-        Arguments defaultParameters = new Arguments();
-        defaultParameters.addArgument(METHOD_TAG,"test");
-        defaultParameters.addArgument(ARG1_TAG,"arg1");
-        defaultParameters.addArgument(ARG2_TAG,"arg2");
+    public DiameterStack(DiameterStackConfiguration diameterStackConfiguration) throws Exception {
+        this.diameterStackConfiguration = diameterStackConfiguration;
 
-        return defaultParameters;
+        clientStack = new StackImpl();
+        sessionFactory = clientStack.init(createConfiguration(diameterStackConfiguration.getJdiameterConfigurationFile()));
+
+        // Register network request listener, even though we wont receive requests
+        // this has to be done to inform stack that we support application
+        Network network = clientStack.unwrap(Network.class);
+        network.addNetworkReqListener(request -> null, diameterStackConfiguration.getAppId());
     }
 
-    @Override
-    public SampleResult runTest(JavaSamplerContext context) {
-        getNewLogger().info("Running!");
-        SampleResult result = new SampleResult();
-        result.setIgnore();
-        return result;
+    void start() throws InternalException, IllegalDiameterStateException {
+        clientStack.start();
+    }
+
+    void stop() throws InternalException, IllegalDiameterStateException {
+        clientStack.stop(10, TimeUnit.SECONDS, DisconnectCause.REBOOTING);
+    }
+
+    void destroy() {
+        clientStack.destroy();
+    }
+
+    private Configuration createConfiguration(String configFile) throws Exception {
+        InputStream is = null;
+        try {
+            is = getClass().getResourceAsStream(configFile);
+            return new XMLConfiguration(is);
+        } finally {
+            if(is != null) {
+                is.close();
+            }
+        }
     }
 }
