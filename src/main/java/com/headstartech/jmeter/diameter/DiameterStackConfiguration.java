@@ -1,4 +1,8 @@
+package com.headstartech.jmeter.diameter;
+
 import org.jdiameter.api.ApplicationId;
+
+import java.io.File;
 
 /**
  * @author Per Johansson
@@ -9,14 +13,14 @@ public class DiameterStackConfiguration {
     private final ApplicationId appId;
     private final long vendorId;
     private final String serverURI;
-    private final String jdiameterConfigurationFile;
+    private final File jdiameterConfigFile;
 
-    public DiameterStackConfiguration(int commandCode, ApplicationId appId, long vendorId, String serverURI, String jdiameterConfigurationFile) {
+    public DiameterStackConfiguration(int commandCode, ApplicationId appId, long vendorId, String serverURI, File jdiameterConfigFile) {
         this.commandCode = commandCode;
         this.appId = appId;
         this.vendorId = vendorId;
         this.serverURI = serverURI;
-        this.jdiameterConfigurationFile = jdiameterConfigurationFile;
+        this.jdiameterConfigFile = jdiameterConfigFile;
     }
 
     public int getCommandCode() {
@@ -35,7 +39,7 @@ public class DiameterStackConfiguration {
         return serverURI;
     }
 
-    public String getJdiameterConfigurationFile() {
-        return jdiameterConfigurationFile;
+    public File getJdiameterConfigFile() {
+        return jdiameterConfigFile;
     }
 }
