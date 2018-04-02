@@ -17,11 +17,12 @@ public class DiameterStackTest {
         long vendorId = 1;
         String serverHost = "localhost";
         Integer serverPort = 3688;
+        String realm = "exchange.example.org";
 
         File configurationFile = new File(getClass().getClassLoader().getResource("client-jdiameter-config.xml").getFile());
 
         String serverURI =  "aaa://" + serverHost + ":" + serverPort;
-        DiameterStackConfiguration diameterStackConfiguration = new DiameterStackConfiguration(commandCode, authAppId, vendorId, serverURI, configurationFile);
+        DiameterStackConfiguration diameterStackConfiguration = new DiameterStackConfiguration(commandCode, authAppId, vendorId, realm, serverURI, configurationFile);
         DiameterStack diameterStack = new DiameterStack(diameterStackConfiguration);
         diameterStack.start();
         diameterStack.stop();

@@ -19,6 +19,7 @@ public class DiameterStackSampler extends AbstractJavaSamplerClient {
     private static final String SERVER_HOST_ARG_NAME = "server-host";
     private static final String SERVER_PORT_ARG_NAME = "server-port";
     private static final String CONFIGURATION_FILE_ARG_NAME = "configuration-file";
+    private static final String REALM_ARG_NAME = "realm";
 
     private static final Integer COMMAND_CODE_DEFAULT = 100;
     private static final Long AUTHENTICATION_APPLICATION_ID_DEFAULT = 100L;
@@ -26,6 +27,7 @@ public class DiameterStackSampler extends AbstractJavaSamplerClient {
     private static final String SERVER_HOST_DEFAULT = "127.0.0.1";
     private static final Integer SERVER_PORT_DEFAULT = 3868;
     private static final String CONFIGURATION_FILE_DEFAULT = "conf/client-jdiameter-config.xml";
+    private static final String REALM_DEFAULT = "exchange.example.org";
 
     @Override
     public Arguments getDefaultParameters() {
@@ -34,6 +36,7 @@ public class DiameterStackSampler extends AbstractJavaSamplerClient {
         defaultParameters.addArgument(COMMAND_CODE_ARG_NAME,String.valueOf(COMMAND_CODE_DEFAULT));
         defaultParameters.addArgument(AUTHENTICATION_APPLICATION_ID_ARG_NAME,String.valueOf(AUTHENTICATION_APPLICATION_ID_DEFAULT));
         defaultParameters.addArgument(VENDOR_ID_ARG_NAME,String.valueOf(VENDOR_ID_DEFAULT));
+        defaultParameters.addArgument(REALM_ARG_NAME, REALM_DEFAULT);
         defaultParameters.addArgument(SERVER_HOST_ARG_NAME,SERVER_HOST_DEFAULT);
         defaultParameters.addArgument(SERVER_PORT_ARG_NAME, String.valueOf(SERVER_PORT_DEFAULT));
         defaultParameters.addArgument(CONFIGURATION_FILE_ARG_NAME,CONFIGURATION_FILE_DEFAULT);
@@ -53,9 +56,10 @@ public class DiameterStackSampler extends AbstractJavaSamplerClient {
         String serverHost = context.getParameter(SERVER_HOST_ARG_NAME, SERVER_HOST_DEFAULT);
         Integer serverPort = context.getIntParameter(SERVER_PORT_ARG_NAME, SERVER_PORT_DEFAULT);
         String configurationFile = context.getParameter(CONFIGURATION_FILE_ARG_NAME, CONFIGURATION_FILE_DEFAULT);
+        String realm = context.getParameter(REALM_ARG_NAME, REALM_DEFAULT);
 
         String serverURI =  "aaa://" + serverHost + ":" + serverPort;
-        DiameterStackConfiguration diameterStackConfiguration = new DiameterStackConfiguration(commandCode, authAppId, vendorId, serverURI, new File(configurationFile));
+        DiameterStackConfiguration diameterStackConfiguration = new DiameterStackConfiguration(commandCode, authAppId, vendorId, realm, serverURI, new File(configurationFile));
         try {
             DiameterStack diameterStack = new DiameterStack(diameterStackConfiguration);
         } catch (Exception e) {

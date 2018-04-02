@@ -12,13 +12,15 @@ public class DiameterStackConfiguration {
     private final int commandCode;
     private final ApplicationId appId;
     private final long vendorId;
+    private final String realm;
     private final String serverURI;
     private final File jdiameterConfigFile;
 
-    public DiameterStackConfiguration(int commandCode, ApplicationId appId, long vendorId, String serverURI, File jdiameterConfigFile) {
+    public DiameterStackConfiguration(int commandCode, ApplicationId appId, long vendorId, String realm, String serverURI, File jdiameterConfigFile) {
         this.commandCode = commandCode;
         this.appId = appId;
         this.vendorId = vendorId;
+        this.realm = realm;
         this.serverURI = serverURI;
         this.jdiameterConfigFile = jdiameterConfigFile;
     }
@@ -41,5 +43,9 @@ public class DiameterStackConfiguration {
 
     public File getJdiameterConfigFile() {
         return jdiameterConfigFile;
+    }
+
+    public String getRealm() {
+        return realm;
     }
 }
