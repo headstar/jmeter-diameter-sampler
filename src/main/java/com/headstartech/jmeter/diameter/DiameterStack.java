@@ -40,6 +40,14 @@ public class DiameterStack {
         stack.destroy();
     }
 
+    public DiameterStackConfiguration getDiameterStackConfiguration() {
+        return diameterStackConfiguration;
+    }
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
     private Configuration createConfiguration(File configFile) throws Exception {
         InputStream is = null;
         try {
