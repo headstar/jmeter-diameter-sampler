@@ -16,3 +16,4 @@ gradle-app.setting
 jmeter-diameter-sampler.*
 jmeter-diameter-sampler*
 out/
+dependencies/
