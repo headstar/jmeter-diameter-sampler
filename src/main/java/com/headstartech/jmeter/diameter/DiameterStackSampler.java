@@ -13,6 +13,8 @@ import java.io.File;
  */
 public class DiameterStackSampler extends AbstractJavaSamplerClient {
 
+    public static final String DIAMETER_STACK_KEY = "diameterStack";
+
     private static final String COMMAND_CODE_ARG_NAME = "command-code";
     private static final String AUTHENTICATION_APPLICATION_ID_ARG_NAME = "authentication-application-id";
     private static final String VENDOR_ID_ARG_NAME= "vendor-id";
@@ -62,6 +64,7 @@ public class DiameterStackSampler extends AbstractJavaSamplerClient {
         DiameterStackConfiguration diameterStackConfiguration = new DiameterStackConfiguration(commandCode, authAppId, vendorId, realm, serverURI, new File(configurationFile));
         try {
             DiameterStack diameterStack = new DiameterStack(diameterStackConfiguration);
+            context.getJMeterProperties().put(DIAMETER_STACK_KEY, diameterStack);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
