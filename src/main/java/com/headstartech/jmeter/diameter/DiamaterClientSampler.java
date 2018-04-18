@@ -16,7 +16,7 @@ public class DiamaterClientSampler extends AbstractJavaSamplerClient {
 
     @Override
     public SampleResult runTest(JavaSamplerContext context) {
-        DiameterStack diameterStack = (DiameterStack) context.getJMeterProperties().get(DiameterStackSampler.DIAMETER_STACK_KEY);
+        DiameterStack diameterStack = (DiameterStack) context.getJMeterProperties().get(DiameterStackSetupSampler.DIAMETER_STACK_KEY);
 
         // TODO: check type and log error
         DiametertTestScenario diametertTestScenario = (DiametertTestScenario) context.getJMeterVariables().getObject(DIAMETER_TEST_SCENARIO_KEY);

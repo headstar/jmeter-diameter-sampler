@@ -11,7 +11,7 @@ import java.io.File;
 /**
  * @author Per Johansson
  */
-public class DiameterStackSampler extends AbstractJavaSamplerClient {
+public class DiameterStackSetupSampler extends AbstractJavaSamplerClient {
 
     public static final String DIAMETER_STACK_KEY = "diameterStack";
 
@@ -64,6 +64,7 @@ public class DiameterStackSampler extends AbstractJavaSamplerClient {
         DiameterStackConfiguration diameterStackConfiguration = new DiameterStackConfiguration(commandCode, authAppId, vendorId, realm, serverURI, new File(configurationFile));
         try {
             DiameterStack diameterStack = new DiameterStack(diameterStackConfiguration);
+            diameterStack.start();
             context.getJMeterProperties().put(DIAMETER_STACK_KEY, diameterStack);
         } catch (Exception e) {
             throw new RuntimeException(e);

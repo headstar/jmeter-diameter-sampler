@@ -49,7 +49,7 @@
 
   <Network>
     <Peers>
-      <Peer name="aaa://127.0.0.1:3868" attempt_connect="true" rating="1" />
+      <Peer name="aaa://127.0.0.1:3868" attempt_connect="false" rating="1" />
     </Peers>
     <Realms>
       <Realm name="exchange.example.org" peers="127.0.0.1"
