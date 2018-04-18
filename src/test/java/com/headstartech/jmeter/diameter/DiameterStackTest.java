@@ -20,9 +20,11 @@ public class DiameterStackTest {
         String realm = "exchange.example.org";
 
         File configurationFile = new File(getClass().getClassLoader().getResource("client-jdiameter-config.xml").getFile());
+        File dictionaryFile = new File(getClass().getClassLoader().getResource("dictionary.xml").getFile());
 
         String serverURI =  "aaa://" + serverHost + ":" + serverPort;
-        DiameterStackConfiguration diameterStackConfiguration = new DiameterStackConfiguration(commandCode, authAppId, vendorId, realm, serverURI, configurationFile);
+        DiameterStackConfiguration diameterStackConfiguration = new DiameterStackConfiguration(commandCode, authAppId, vendorId, realm, serverURI,
+                configurationFile, dictionaryFile);
         DiameterStack diameterStack = new DiameterStack(diameterStackConfiguration);
         diameterStack.start();
         diameterStack.stop();

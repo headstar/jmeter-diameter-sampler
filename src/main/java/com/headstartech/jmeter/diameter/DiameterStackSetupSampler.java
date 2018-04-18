@@ -21,6 +21,7 @@ public class DiameterStackSetupSampler extends AbstractJavaSamplerClient {
     private static final String SERVER_HOST_ARG_NAME = "server-host";
     private static final String SERVER_PORT_ARG_NAME = "server-port";
     private static final String CONFIGURATION_FILE_ARG_NAME = "configuration-file";
+    private static final String DICTIONARY_FILE_ARG_NAME = "dictionary-file";
     private static final String REALM_ARG_NAME = "realm";
 
     private static final Integer COMMAND_CODE_DEFAULT = 100;
@@ -29,6 +30,7 @@ public class DiameterStackSetupSampler extends AbstractJavaSamplerClient {
     private static final String SERVER_HOST_DEFAULT = "127.0.0.1";
     private static final Integer SERVER_PORT_DEFAULT = 3868;
     private static final String CONFIGURATION_FILE_DEFAULT = "conf/client-jdiameter-config.xml";
+    private static final String DICTIONARY_FILE_DEFAULT = "conf/dictionary.xml";
     private static final String REALM_DEFAULT = "exchange.example.org";
 
     @Override
@@ -42,6 +44,7 @@ public class DiameterStackSetupSampler extends AbstractJavaSamplerClient {
         defaultParameters.addArgument(SERVER_HOST_ARG_NAME,SERVER_HOST_DEFAULT);
         defaultParameters.addArgument(SERVER_PORT_ARG_NAME, String.valueOf(SERVER_PORT_DEFAULT));
         defaultParameters.addArgument(CONFIGURATION_FILE_ARG_NAME,CONFIGURATION_FILE_DEFAULT);
+        defaultParameters.addArgument(DICTIONARY_FILE_ARG_NAME,DICTIONARY_FILE_DEFAULT);
 
         return defaultParameters;
     }
@@ -59,9 +62,11 @@ public class DiameterStackSetupSampler extends AbstractJavaSamplerClient {
         Integer serverPort = context.getIntParameter(SERVER_PORT_ARG_NAME, SERVER_PORT_DEFAULT);
         String configurationFile = context.getParameter(CONFIGURATION_FILE_ARG_NAME, CONFIGURATION_FILE_DEFAULT);
         String realm = context.getParameter(REALM_ARG_NAME, REALM_DEFAULT);
+        String dictionaryFile = context.getParameter(DICTIONARY_FILE_ARG_NAME, DICTIONARY_FILE_DEFAULT);
 
         String serverURI =  "aaa://" + serverHost + ":" + serverPort;
-        DiameterStackConfiguration diameterStackConfiguration = new DiameterStackConfiguration(commandCode, authAppId, vendorId, realm, serverURI, new File(configurationFile));
+        DiameterStackConfiguration diameterStackConfiguration = new DiameterStackConfiguration(commandCode, authAppId, vendorId, realm, serverURI, new File(configurationFile),
+                new File(dictionaryFile));
         try {
             DiameterStack diameterStack = new DiameterStack(diameterStackConfiguration);
             diameterStack.start();

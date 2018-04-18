@@ -3,6 +3,7 @@ package com.headstartech.jmeter.diameter;
 import org.jdiameter.api.*;
 import org.jdiameter.server.impl.StackImpl;
 import org.jdiameter.server.impl.helpers.XMLConfiguration;
+import org.mobicents.diameter.dictionary.AvpDictionary;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 public class DiameterStack {
 
+    private AvpDictionary dictionary = AvpDictionary.INSTANCE;
     private final Stack stack;
     private final SessionFactory sessionFactory;
     private final DiameterStackConfiguration diameterStackConfiguration;
@@ -21,6 +23,8 @@ public class DiameterStack {
         // TODO: using server stack as in https://github.com/RestComm/jdiameter/blob/master/examples/guide1/src/main/java/org/example/client/ExampleClient.java ??
         stack = new StackImpl();
         sessionFactory = stack.init(createConfiguration(diameterStackConfiguration.getJdiameterConfigFile()));
+
+        dictionary.parseDictionary(diameterStackConfiguration.getDictionaryFile().getPath());
 
         // Register network request listener, even though we wont receive requests
         // this has to be done to inform stack that we support application
