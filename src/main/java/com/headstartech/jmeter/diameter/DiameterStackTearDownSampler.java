@@ -25,7 +25,6 @@ public class DiameterStackTearDownSampler extends AbstractJavaSamplerClient {
                 // ignore
             } finally {
                 diameterStack.destroy();
-                getNewLogger().info("destroyed!");
             }
         }
         SampleResult sampleResult = new SampleResult();

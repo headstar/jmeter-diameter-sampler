@@ -12,19 +12,14 @@ public class DiameterStackTest {
 
     @Test
     public void canCreateStartStopAndDestroy() throws Exception {
-        int commandCode = 100;
-        ApplicationId authAppId = ApplicationId.createByAuthAppId(1);
-        long vendorId = 1;
-        String serverHost = "localhost";
-        Integer serverPort = 3688;
-        String realm = "exchange.example.org";
 
         File configurationFile = new File(getClass().getClassLoader().getResource("client-jdiameter-config.xml").getFile());
         File dictionaryFile = new File(getClass().getClassLoader().getResource("dictionary.xml").getFile());
+        ApplicationId authAppId = ApplicationId.createByAuthAppId(1);
 
-        String serverURI =  "aaa://" + serverHost + ":" + serverPort;
-        DiameterStackConfiguration diameterStackConfiguration = new DiameterStackConfiguration(commandCode, authAppId, vendorId, realm, serverURI,
-                configurationFile, dictionaryFile);
+        DiameterStackConfiguration diameterStackConfiguration = new DiameterStackConfiguration(
+                configurationFile, dictionaryFile, authAppId);
+
         DiameterStack diameterStack = new DiameterStack(diameterStackConfiguration);
         diameterStack.start();
         diameterStack.stop();

@@ -29,7 +29,7 @@ public class DiameterStack {
         // Register network request listener, even though we wont receive requests
         // this has to be done to inform stack that we support application
         Network network = stack.unwrap(Network.class);
-        network.addNetworkReqListener(request -> null, diameterStackConfiguration.getAppId());
+        network.addNetworkReqListener(request -> null, diameterStackConfiguration.getApplicationId());
     }
 
     public void start() throws InternalException, IllegalDiameterStateException {
