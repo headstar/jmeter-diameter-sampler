@@ -12,14 +12,16 @@ import java.util.concurrent.TimeUnit;
 
 public class DiameterStack {
 
-    private AvpDictionary dictionary = AvpDictionary.INSTANCE;
     private final Stack stack;
     private final SessionFactory sessionFactory;
+    private final DiameterHelper diameterHelper;
 
     public DiameterStack(DiameterStackConfiguration diameterStackConfiguration) throws Exception {
         stack = new StackImpl();
         sessionFactory = stack.init(createConfiguration(diameterStackConfiguration.getJdiameterConfigFile()));
+        AvpDictionary dictionary = AvpDictionary.INSTANCE;
         dictionary.parseDictionary(diameterStackConfiguration.getDictionaryFile().getPath());
+        diameterHelper = new DiameterHelper(dictionary);
     }
 
     public void start() throws InternalException, IllegalDiameterStateException {
@@ -36,6 +38,10 @@ public class DiameterStack {
 
     public SessionFactory getSessionFactory() {
         return sessionFactory;
+    }
+
+    public DiameterHelper getDiameterHelper() {
+        return diameterHelper;
     }
 
     private Configuration createConfiguration(File configFile) throws Exception {

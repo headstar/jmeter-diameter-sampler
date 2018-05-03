@@ -42,11 +42,11 @@ public class DiamaterClientSampler extends AbstractJavaSamplerClient {
                 }
             };
 
-            Request nextRequest = diametertTestScenario.createInitialRequest(session);
+            Request nextRequest = diametertTestScenario.createInitialRequest(diameterStack.getDiameterHelper(), session);
             while (nextRequest != null) {
                 session.send(nextRequest, eventListener);
                 DiameterResponse response = (DiameterResponse) answerQueue.poll();
-                nextRequest = diametertTestScenario.createNextRequest(response, session);
+                nextRequest = diametertTestScenario.createNextRequest(diameterStack.getDiameterHelper(), response, session);
             };
         } catch (InternalException | IllegalDiameterStateException | RouteException | OverloadException e) {
             sampleResult.setSuccessful(false);

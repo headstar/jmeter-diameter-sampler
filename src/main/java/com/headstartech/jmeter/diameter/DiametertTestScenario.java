@@ -8,7 +8,7 @@ import org.jdiameter.api.Session;
  */
 public interface DiametertTestScenario {
 
-    Request createInitialRequest(Session session);
+    Request createInitialRequest(DiameterHelper diameterHelper, Session session);
 
-    Request createNextRequest(DiameterResponse response, Session session);
+    Request createNextRequest(DiameterHelper diameterHelper, DiameterResponse response, Session session);
 }
