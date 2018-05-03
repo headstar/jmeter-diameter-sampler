@@ -1,8 +1,8 @@
 package com.headstartech.jmeter.diameter;
 
 import org.jdiameter.api.*;
-import org.jdiameter.server.impl.StackImpl;
-import org.jdiameter.server.impl.helpers.XMLConfiguration;
+import org.jdiameter.client.impl.StackImpl;
+import org.jdiameter.client.impl.helpers.XMLConfiguration;
 import org.mobicents.diameter.dictionary.AvpDictionary;
 
 import java.io.File;
@@ -15,21 +15,11 @@ public class DiameterStack {
     private AvpDictionary dictionary = AvpDictionary.INSTANCE;
     private final Stack stack;
     private final SessionFactory sessionFactory;
-    private final DiameterStackConfiguration diameterStackConfiguration;
 
     public DiameterStack(DiameterStackConfiguration diameterStackConfiguration) throws Exception {
-        this.diameterStackConfiguration = diameterStackConfiguration;
-
-        // TODO: using server stack as in https://github.com/RestComm/jdiameter/blob/master/examples/guide1/src/main/java/org/example/client/ExampleClient.java ??
         stack = new StackImpl();
         sessionFactory = stack.init(createConfiguration(diameterStackConfiguration.getJdiameterConfigFile()));
-
         dictionary.parseDictionary(diameterStackConfiguration.getDictionaryFile().getPath());
-
-        // Register network request listener, even though we wont receive requests
-        // this has to be done to inform stack that we support application
-        Network network = stack.unwrap(Network.class);
-        network.addNetworkReqListener(request -> null, diameterStackConfiguration.getApplicationId());
     }
 
     public void start() throws InternalException, IllegalDiameterStateException {
@@ -42,10 +32,6 @@ public class DiameterStack {
 
     public void destroy() {
         stack.destroy();
-    }
-
-    public DiameterStackConfiguration getDiameterStackConfiguration() {
-        return diameterStackConfiguration;
     }
 
     public SessionFactory getSessionFactory() {
