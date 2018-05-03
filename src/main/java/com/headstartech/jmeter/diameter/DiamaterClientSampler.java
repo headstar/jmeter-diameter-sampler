@@ -17,12 +17,9 @@ public class DiamaterClientSampler extends AbstractJavaSamplerClient {
     @Override
     public SampleResult runTest(JavaSamplerContext context) {
         DiameterStack diameterStack = (DiameterStack) context.getJMeterProperties().get(DiameterStackSetupSampler.DIAMETER_STACK_KEY);
-
-        // TODO: check type and log error
         DiametertTestScenario diametertTestScenario = (DiametertTestScenario) context.getJMeterVariables().getObject(DIAMETER_TEST_SCENARIO_KEY);
 
         SampleResult sampleResult = new SampleResult();
-
         Session session = null;
         try {
             session = diameterStack.getSessionFactory().getNewSession();
@@ -33,7 +30,9 @@ public class DiamaterClientSampler extends AbstractJavaSamplerClient {
                     try {
                         answerQueue.put(new DiameterResponse(request, answer));
                     } catch (InterruptedException e) {
-                        // TODO: handle this
+                        getNewLogger().warn("thread interrupted", e);
+                        sampleResult.setSuccessful(false);
+                        return;
                     }
                 }
 
@@ -45,29 +44,18 @@ public class DiamaterClientSampler extends AbstractJavaSamplerClient {
 
             Request nextRequest = diametertTestScenario.createInitialRequest(session);
             while (nextRequest != null) {
-                try {
-                    session.send(nextRequest, eventListener);
-                } catch (InternalException e) {
-                    e.printStackTrace();
-                } catch (IllegalDiameterStateException e) {
-                    e.printStackTrace();
-                } catch (RouteException e) {
-                    e.printStackTrace();
-                } catch (OverloadException e) {
-                    e.printStackTrace();
-                }
+                session.send(nextRequest, eventListener);
                 DiameterResponse response = (DiameterResponse) answerQueue.poll();
                 nextRequest = diametertTestScenario.createNextRequest(response, session);
             };
-        } catch (InternalException e) {
-            // TODO: what to return?
-            return sampleResult;
+        } catch (InternalException | IllegalDiameterStateException | RouteException | OverloadException e) {
+            sampleResult.setSuccessful(false);
+            getNewLogger().error("Exception caught", e);
         } finally {
             if(session != null) {
                 session.release();
             }
         }
-
         return sampleResult;
     }
 
