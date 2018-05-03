@@ -43,7 +43,7 @@ public class DiamaterClientSampler extends AbstractJavaSamplerClient {
                 }
             };
 
-            Request nextRequest = diametertTestScenario.createInitialRequest(session, diameterStack.getDiameterStackConfiguration());
+            Request nextRequest = diametertTestScenario.createInitialRequest(session);
             while (nextRequest != null) {
                 try {
                     session.send(nextRequest, eventListener);
@@ -57,7 +57,7 @@ public class DiamaterClientSampler extends AbstractJavaSamplerClient {
                     e.printStackTrace();
                 }
                 DiameterResponse response = (DiameterResponse) answerQueue.poll();
-                nextRequest = diametertTestScenario.createNextRequest(response, session, diameterStack.getDiameterStackConfiguration());
+                nextRequest = diametertTestScenario.createNextRequest(response, session);
             };
         } catch (InternalException e) {
             // TODO: what to return?
